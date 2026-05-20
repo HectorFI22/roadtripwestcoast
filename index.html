@@ -3,429 +3,476 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<link rel="apple-touch-icon" href="icon.png">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#f97316">
+  <title>West Coast Roadtrip</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-export default function RoadtripUSA() {
+<body class="bg-amber-50 text-orange-700 p-6">
 
-  const days = [
-    {
-      date: '2026-07-30',
-      day: '30 Jul',
-      title: 'Llegada a San Francisco',
-      emoji: '🌁',
-      distanceKm: 20,
-      lodging: 'San Francisco (Fisherman’s Wharf)',
-      summary: 'Llegada a la Costa Oeste, primeras sensaciones y adaptación al jet lag.',
-      itinerary: [
-        'Llegada al aeropuerto internacional de San Francisco sobre las 14:00, paso por inmigración y recogida de equipaje mientras empieza la adaptación al cambio horario.',
-        'Traslado hacia la ciudad cruzando barrios residenciales hasta **Fisherman’s Wharf**, primera toma de contacto con la bahía.',
-        'Paseo por **Pier 39**, observando los leones marinos y el ambiente portuario.',
-        'Primer contacto con los **Cable Cars**, símbolo histórico de la ciudad.',
-        'Cena ligera y descanso para recuperación del jet lag.'
-      ]
-    },
-    {
-      date: '2026-07-31',
-      day: '31 Jul',
-      title: 'San Francisco completo',
-      emoji: '🌉',
-      distanceKm: 30,
-      lodging: 'San Francisco',
-      summary: 'Día completo explorando iconos de la ciudad.',
-      itinerary: [
-        'Visita al **Golden Gate Bridge** intentando evitar la niebla matinal.',
-        'Ferry a **Alcatraz** con visita a la antigua prisión.',
-        'Descenso por la famosa **Lombard Street**.',
-        'Paseo por **Chinatown**, el más antiguo de EE.UU.',
-        'Parada en **Painted Ladies** en Alamo Square.',
-        'Atardecer en **Twin Peaks** con vistas panorámicas.'
-      ]
-    },
-    {
-      date: '2026-08-01',
-      day: '1 Ago',
-      title: 'San Francisco → Yosemite',
-      emoji: '🏞️',
-      distanceKm: 320,
-      lodging: 'Yosemite Valley / El Portal',
-      summary: 'Entrada en Sierra Nevada y Yosemite.',
-      itinerary: [
-        'Salida atravesando el **Central Valley** agrícola.',
-        'Llegada a **Tunnel View**, primera gran panorámica de Yosemite.',
-        'Descenso a **Yosemite Valley**.',
-        'Parada frente a **El Capitan**.',
-        'Visita a **Bridalveil Fall**.'
-      ]
-    },
-    {
-      date: '2026-08-02',
-      day: '2 Ago',
-      title: 'Yosemite',
-      emoji: '⛰️',
-      distanceKm: 50,
-      lodging: 'Yosemite Valley',
-      summary: 'Día completo explorando el corazón natural de Yosemite.',
-      itinerary: [
-        'Salida temprano hacia **Glacier Point**, uno de los miradores más impresionantes de toda California, desde donde se aprecia el valle completo, **Half Dome** y las gigantescas paredes de granito que hicieron famoso al parque.',
-        'Paseo relajado hasta **Mirror Lake**, un lago estacional que refleja las montañas como un espejo y permite disfrutar de una zona mucho más tranquila y silenciosa del parque.',
-        'Recorrido por parte del **Valley Loop Trail**, caminando entre bosques de pinos, praderas y ríos glaciares mientras aparecen continuamente vistas de **El Capitan** y **Yosemite Falls**.',
-        'Por la tarde, realización del famoso **Mist Trail** hasta **Vernal Fall**, probablemente el sendero más icónico del parque, donde la fuerza de la cascada genera una nube de agua constante sobre las escaleras de piedra.',
-        'Atardecer tranquilo en Yosemite Valley disfrutando del ambiente natural y del cambio de colores sobre las montañas de granito.'
-      ]
-    },
-    {
-      date: '2026-08-03',
-      day: '3 Ago',
-      title: 'Yosemite → Sequoia',
-      emoji: '🌲',
-      distanceKm: 220,
-      lodging: 'Three Rivers',
-      summary: 'Cambio de paisaje hacia los bosques de secuoyas gigantes.',
-      itinerary: [
-        'Salida desde Yosemite atravesando carreteras de montaña de Sierra Nevada rodeadas de bosques inmensos y pequeños pueblos del interior de California.',
-        'Entrada en **Sequoia National Park**, parque famoso por albergar algunos de los árboles más grandes y antiguos del planeta.',
-        'Visita al espectacular **General Sherman Tree**, considerado el árbol con mayor volumen del mundo, una auténtica barbaridad natural que supera los 80 metros de altura.',
-        'Paseo por **Giant Forest**, donde cientos de secuoyas gigantes crean un ambiente casi irreal y silencioso.',
-        'Parada en **Tunnel Log**, un árbol caído atravesado artificialmente para permitir el paso de vehículos y convertido en uno de los puntos clásicos del parque.',
-        'Llegada a Three Rivers para descansar antes del gran cruce desértico del día siguiente.'
-      ]
-    },
-    {
-      date: '2026-08-04',
-      day: '4 Ago',
-      title: 'Sequoia → Death Valley → Las Vegas',
-      emoji: '🏜️',
-      distanceKm: 450,
-      lodging: 'Las Vegas',
-      summary: 'Una de las etapas más espectaculares del viaje cruzando el desierto más extremo de Estados Unidos.',
-      itinerary: [
-        'Salida muy temprano para evitar las horas de máximo calor en **Death Valley**, uno de los lugares más extremos del planeta.',
-        'Parada en **Zabriskie Point**, famoso por sus montañas erosionadas con formas onduladas y colores amarillos y anaranjados que parecen de otro planeta.',
-        'Visita a **Badwater Basin**, situado 86 metros bajo el nivel del mar y considerado el punto más bajo de Norteamérica.',
-        'Paso por **Furnace Creek**, pequeño oasis en mitad del desierto donde es importante hidratarse y revisar combustible.',
-        'Durante la ruta aparecen enormes rectas desérticas, montañas áridas y paisajes completamente vacíos que representan el auténtico Oeste americano.',
-        'Llegada a **Las Vegas** al anochecer, donde el contraste entre el desierto y la explosión de luces de la ciudad resulta brutal.'
-      ]
-    },
-    {
-      date: '2026-08-05',
-      day: '5 Ago',
-      title: 'Las Vegas',
-      emoji: '🎰',
-      distanceKm: 20,
-      lodging: 'Las Vegas',
-      summary: 'Día más relajado disfrutando de la ciudad más extravagante de Estados Unidos.',
-      itinerary: [
-        'Recorrido completo por **The Strip**, la avenida principal de Las Vegas donde se concentran los hoteles y casinos más famosos del mundo.',
-        'Visita al **Bellagio** para ver sus fuentes danzantes sincronizadas con música.',
-        'Entrada en hoteles temáticos como París, Venecia o Nueva York, todos construidos como enormes escenarios cinematográficos.',
-        'Tiempo libre para descansar en la piscina y recuperarse de los kilómetros acumulados durante el roadtrip.',
-        'Por la noche, paseo por **Fremont Street**, la zona clásica de Las Vegas cubierta por una gigantesca pantalla LED.'
-      ]
-    },
-    {
-      date: '2026-08-06',
-      day: '6 Ago',
-      title: 'Las Vegas → Zion',
-      emoji: '🏞️',
-      distanceKm: 260,
-      lodging: 'Springdale',
-      summary: 'Primer gran contacto con los paisajes rojizos de Utah.',
-      itinerary: [
-        'Salida desde Las Vegas dejando atrás el ambiente artificial de Nevada para entrar poco a poco en los enormes paisajes abiertos de Utah.',
-        'Durante la carretera comienzan a aparecer formaciones rocosas rojizas y cañones que anuncian la llegada al suroeste más salvaje de Estados Unidos.',
-        'Entrada en **Zion National Park**, probablemente uno de los parques más espectaculares del viaje gracias a sus paredes verticales gigantescas y al contraste entre roca roja y vegetación.',
-        'Paseo por **Riverside Walk**, sendero sencillo que sigue el curso del río Virgin entre paredes de cientos de metros de altura.',
-        'Paradas en varios miradores panorámicos para contemplar la inmensidad del cañón principal y entender por qué Zion es considerado uno de los lugares favoritos de senderistas y fotógrafos.',
-        'Llegada al pequeño pueblo de Springdale, completamente integrado en el paisaje del parque y perfecto para descansar rodeado de montañas.'
-      ]
-    },
-    {
-      date: '2026-08-07',
-      day: '7 Ago',
-      title: 'Zion → Bryce Canyon',
-      emoji: '🧡',
-      distanceKm: 130,
-      lodging: 'Bryce Canyon City',
-      summary: 'Uno de los paisajes más surrealistas de todo el roadtrip.',
-      itinerary: [
-        'Salida desde Zion atravesando carreteras panorámicas rodeadas de montañas rojizas y bosques del sur de Utah.',
-        'Llegada a **Bryce Canyon National Park**, completamente distinto al resto de parques gracias a sus formaciones llamadas hoodoos.',
-        'Primera parada en **Bryce Point**, donde aparece ante vosotros el gigantesco anfiteatro natural lleno de agujas de piedra naranja y rojiza.',
-        'Recorrido por **Sunrise Point** y **Sunset Point**, dos miradores clásicos desde donde cambian totalmente los colores según la posición del sol.',
-        'Descenso parcial por el famoso **Navajo Loop Trail**, caminando entre paredes estrechas y columnas rocosas que parecen escenarios de fantasía.',
-        'Atardecer tranquilo disfrutando de cómo Bryce Canyon cambia de color constantemente durante las últimas horas del día.'
-      ]
-    },
-    {
-      date: '2026-08-08',
-      day: '8 Ago',
-      title: 'Bryce → Antelope → Page',
-      emoji: '📸',
-      distanceKm: 240,
-      lodging: 'Page',
-      summary: 'Día de cañones estrechos, luces imposibles y paisajes del Colorado.',
-      itinerary: [
-        'Salida temprano hacia Arizona atravesando carreteras desérticas infinitas rodeadas de paisajes áridos y rojizos.',
-        'Llegada a **Antelope Canyon**, uno de los lugares más fotografiados del oeste americano, famoso por sus estrechos pasillos esculpidos por el agua y por los haces de luz que atraviesan la roca.',
-        'Recorrido guiado por el interior del cañón entendiendo cómo las inundaciones repentinas fueron moldeando sus formas onduladas durante miles de años.',
-        'Parada posterior en **Horseshoe Bend**, impresionante meandro del río Colorado que forma una curva perfecta excavada en la roca.',
-        'Tiempo libre en Page para descansar y disfrutar de un ambiente completamente desértico típico del norte de Arizona.',
-        'Atardecer tranquilo sobre el paisaje rojizo del lago Powell y los alrededores de Page.'
-      ]
-    },
-    {
-      date: '2026-08-09',
-      day: '9 Ago',
-      title: 'Page → Monument Valley',
-      emoji: '🤠',
-      distanceKm: 200,
-      lodging: 'Monument Valley',
-      summary: 'El auténtico paisaje del western americano.',
-      itinerary: [
-        'Ruta por carreteras infinitas del territorio navajo mientras el paisaje se vuelve cada vez más cinematográfico.',
-        'Llegada a **Monument Valley**, uno de los lugares más icónicos de todo Estados Unidos gracias a sus gigantescas formaciones rocosas aisladas en mitad del desierto.',
-        'Recorrido por la **Monument Valley Scenic Drive**, atravesando pistas de tierra entre las enormes mesas y buttes rojizas.',
-        'Parada en **Forrest Gump Point**, famoso punto de carretera donde se grabó una de las escenas más conocidas de la película.',
-        'Explicación de la importancia cultural y espiritual que tiene esta zona para la nación navajo.',
-        'Atardecer inolvidable viendo cómo las rocas adquieren tonos rojos intensísimos con la luz baja del sol.'
-      ]
-    },
-    {
-      date: '2026-08-10',
-      day: '10 Ago',
-      title: 'Monument Valley → Grand Canyon',
-      emoji: '🧭',
-      distanceKm: 280,
-      lodging: 'Tusayan',
-      summary: 'Llegada a una de las grandes maravillas naturales del planeta.',
-      itinerary: [
-        'Salida desde Monument Valley atravesando enormes paisajes abiertos del norte de Arizona.',
-        'Entrada al parque por la panorámica **Desert View Drive**, carretera llena de miradores sobre el Gran Cañón.',
-        'Paradas constantes para contemplar cómo el río Colorado ha excavado durante millones de años uno de los paisajes más impresionantes del mundo.',
-        'Visita a varios miradores del South Rim donde se aprecia la inmensidad real del **Grand Canyon**, algo imposible de entender hasta verlo en persona.',
-        'Tiempo para pasear junto al borde del cañón observando los cambios de color de las paredes rocosas según avanza la tarde.',
-        'Atardecer sobre el Gran Cañón, probablemente uno de los momentos más espectaculares de todo el viaje.'
-      ]
-    },
-    {
-      date: '2026-08-11',
-      day: '11 Ago',
-      title: 'Grand Canyon → Route 66 → Kingman',
-      emoji: '🛣️',
-      distanceKm: 300,
-      lodging: 'Kingman',
-      summary: 'Día dedicado a la Route 66 más auténtica.',
-      itinerary: [
-        'Salida desde el Gran Cañón hacia las carreteras históricas del oeste americano.',
-        'Parada en **Seligman**, pequeño pueblo considerado uno de los lugares que ayudó a preservar la mítica **Route 66**.',
-        'Paseo entre diners clásicos, coches antiguos, moteles vintage y tiendas llenas de referencias a la carretera más famosa del país.',
-        'Visita a **Hackberry General Store**, antigua gasolinera convertida en museo improvisado de la Route 66.',
-        'Conducción relajada por largos tramos históricos rodeados de desierto y pueblos prácticamente detenidos en los años 50.',
-        'Llegada a Kingman, otra ciudad profundamente ligada a la historia de la carretera americana.'
-      ]
-    },
-    {
-      date: '2026-08-12',
-      day: '12 Ago',
-      title: 'Kingman → Joshua Tree → San Diego',
-      emoji: '🌵',
-      distanceKm: 480,
-      lodging: 'San Diego',
-      summary: 'Último gran tramo desértico antes de volver al Pacífico.',
-      itinerary: [
-        'Salida desde Arizona rumbo a California atravesando enormes paisajes desérticos del Mojave.',
-        'Entrada en **Joshua Tree National Park**, famoso por sus árboles retorcidos y sus gigantescas formaciones de roca.',
-        'Paradas en distintos puntos panorámicos entendiendo cómo este parque mezcla dos ecosistemas desérticos diferentes.',
-        'Paseos cortos debido al calor extremo típico de agosto en la zona.',
-        'A medida que avanza la carretera el paisaje cambia poco a poco hasta volver a aparecer el océano Pacífico.',
-        'Llegada a **San Diego**, una de las ciudades con mejor clima de Estados Unidos y ambiente mucho más relajado que Los Ángeles.'
-      ]
-    },
-    {
-      date: '2026-08-13',
-      day: '13 Ago',
-      title: 'San Diego',
-      emoji: '🌊',
-      distanceKm: 40,
-      lodging: 'San Diego',
-      summary: 'Jornada tranquila disfrutando del ambiente costero del sur de California.',
-      itinerary: [
-        'Mañana relajada en **La Jolla**, una de las zonas más bonitas de San Diego, famosa por sus acantilados, aguas turquesas y colonias de focas descansando junto al océano.',
-        'Paseo por la costa observando cuevas marinas, pequeñas calas y el ambiente elegante y tranquilo característico de esta zona.',
-        'Tiempo libre en **Pacific Beach**, donde aparece el ambiente surfero más típico de California con paseo marítimo, bicicletas y bares frente al Pacífico.',
-        'Comida relajada cerca de la playa disfrutando de uno de los días menos intensos del roadtrip y perfectos para descansar de tantas horas de carretera.',
-        'Al final de la tarde, visita a **Sunset Cliffs**, probablemente el mejor lugar de San Diego para contemplar la puesta de sol sobre el océano.',
-        'Noche tranquila disfrutando del ambiente relajado y costero que diferencia San Diego del resto de grandes ciudades californianas.'
-      ]
-    },
-    {
-      date: '2026-08-14',
-      day: '14 Ago',
-      title: 'San Diego → Los Ángeles',
-      emoji: '🌴',
-      distanceKm: 200,
-      lodging: 'Los Ángeles',
-      summary: 'Ruta por algunas de las playas más famosas de la costa californiana.',
-      itinerary: [
-        'Salida desde San Diego siguiendo la costa del Pacífico en dirección norte.',
-        'Primera parada en **Laguna Beach**, una de las localidades costeras más bonitas y exclusivas del sur de California, famosa por sus pequeñas calas y ambiente artístico.',
-        'Continuación hacia **Newport Beach**, zona muy conocida por sus puertos deportivos, mansiones y playas interminables.',
-        'Posible parada en **Huntington Beach**, considerada por muchos la capital del surf en California gracias a sus enormes playas y ambiente surfero.',
-        'Llegada a **Santa Monica**, donde el famoso muelle marca simbólicamente el final de la Route 66.',
-        'Primer paseo nocturno por Los Ángeles disfrutando del ambiente junto al océano y de la energía caótica típica de la ciudad.'
-      ]
-    },
-    {
-      date: '2026-08-15',
-      day: '15 Ago',
-      title: 'Los Ángeles',
-      emoji: '🎬',
-      distanceKm: 40,
-      lodging: 'Los Ángeles',
-      summary: 'Exploración de los iconos cinematográficos y urbanos de Los Ángeles.',
-      itinerary: [
-        'Comienzo del día recorriendo **Hollywood Boulevard**, probablemente la calle más famosa relacionada con el cine y el entretenimiento.',
-        'Paseo entre estrellas del Paseo de la Fama, teatros históricos y carteles luminosos que representan la imagen clásica de Hollywood.',
-        'Subida al **Griffith Observatory**, uno de los mejores miradores de Los Ángeles y lugar desde donde se obtiene una gran vista del cartel de Hollywood y del inmenso entramado urbano de la ciudad.',
-        'Tiempo para recorrer diferentes barrios de Los Ángeles entendiendo cómo la ciudad se extiende casi sin límites entre autopistas y zonas residenciales.',
-        'Tarde en **Santa Monica** y **Venice Beach**, dos lugares completamente distintos pero esenciales para entender el estilo de vida californiano.',
-        'Paseo nocturno disfrutando del ambiente de Venice, lleno de artistas callejeros, música y cultura alternativa junto al océano.'
-      ]
-    },
-    {
-      date: '2026-08-16',
-      day: '16 Ago',
-      title: 'Los Ángeles relax',
-      emoji: '🌅',
-      distanceKm: 30,
-      lodging: 'Los Ángeles',
-      summary: 'Último día completo del viaje con ambiente relajado junto al Pacífico.',
-      itinerary: [
-        'Mañana tranquila recorriendo la costa de **Malibu**, una de las zonas más exclusivas de California y famosa por sus playas abiertas y casas frente al océano.',
-        'Tiempo libre para descansar, hacer algunas compras finales o simplemente disfrutar del ritmo relajado de la costa oeste.',
-        'Posibilidad de realizar el tour de **Warner Bros Studios**, entrando en estudios reales de cine y televisión donde se grabaron películas y series míticas.',
-        'Últimas horas del viaje disfrutando del ambiente californiano, los coches clásicos, las palmeras y la sensación permanente de verano.',
-        'Atardecer final sobre el Pacífico, momento perfecto para cerrar el roadtrip después de miles de kilómetros atravesando desiertos, parques nacionales y grandes ciudades.'
-      ]
-    },
-    {
-      date: '2026-08-17',
-      day: '17 Ago',
-      title: 'Vuelta a Madrid',
-      emoji: '✈️',
-      distanceKm: 0,
-      lodging: 'Vuelo',
-      summary: 'Fin del roadtrip y regreso a casa.',
-      itinerary: [
-        'Última mañana tranquila en Los Ángeles aprovechando para desayunar sin prisas y disfrutar por última vez del ambiente californiano.',
-        'Paseo corto final o últimas compras antes de dirigirse al aeropuerto internacional de Los Ángeles.',
-        'Devolución del coche de alquiler después de miles de kilómetros atravesando algunos de los paisajes más espectaculares de Estados Unidos.',
-        'Vuelo de regreso a Madrid poniendo fin a un roadtrip completo por la Costa Oeste americana.',
-        'Tiempo perfecto para repasar fotos, recuerdos y todos los lugares recorridos durante el viaje.'
-      ]
-    }
-  ];
+<div class="max-w-6xl mx-auto">
+  <h1 class="text-5xl font-black text-center mb-2">🇺🇸 West Coast Roadtrip</h1>
+  <p class="text-center mb-8">Itinerario de viaje</p>
 
-  const [selectedDay, setSelectedDay] = useState(null);
+  <div id="grid" class="grid md:grid-cols-2 gap-4"></div>
+</div>
 
-  const palette = {
-    bg: "bg-amber-50",
-    card: "bg-orange-100",
-    cardActive: "bg-orange-200",
-    accent: "text-orange-700"
-  };
+<!-- MODAL -->
+<div id="modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center p-4">
 
-  const getTripIndex = () => {
-    const start = new Date('2026-07-30');
-    const today = new Date();
-    const diff = Math.floor((today - start) / (1000 * 60 * 60 * 24));
-    if (diff < 0 || diff >= days.length) return null;
-    return diff;
-  };
+  <div class="bg-white rounded-2xl p-6 max-w-3xl w-full text-orange-700 max-h-[85vh] overflow-y-auto shadow-xl relative">
 
-  const currentIndex = getTripIndex();
+    <!-- CRUZ -->
+    <button
+      onclick="closeModal()"
+      class="absolute top-3 right-3 text-2xl font-bold text-orange-600 hover:text-orange-900">
+      ✕
+    </button>
 
-  useEffect(() => {
-    if (currentIndex !== null) {
-      setSelectedDay(days[currentIndex]);
-    }
-  }, [currentIndex]);
+    <h2 id="title" class="text-2xl font-bold mb-2 pr-8"></h2>
 
-  return (
-    <div className={`min-h-screen ${palette.bg} ${palette.accent} p-6`}>
-      <div className="max-w-6xl mx-auto">
+    <p id="summary" class="mb-4"></p>
 
-        <div className="text-center mb-10">
-          <h1 className="text-5xl font-black">🇺🇸 West Coast Roadtrip</h1>
-          <p className="mt-2">Itinerario de viaje</p>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          {days.map((d, i) => (
-            <motion.div
-              key={i}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setSelectedDay(d)}
-              className={`${currentIndex === i ? palette.cardActive : palette.card} rounded-2xl p-5 cursor-pointer`}
-            >
-              <div className="flex justify-between mb-2">
-                <span className="text-2xl">{d.emoji}</span>
-                <span className="text-xs">🚗 {d.distanceKm} km</span>
-              </div>
-              <h3 className="text-xl font-bold mb-1">{d.day} — {d.title}</h3>
-              <p className="text-sm">{d.summary}</p>
-            </motion.div>
-          ))}
-        </div>
-
-        <AnimatePresence>
-          {selectedDay && (
-            <motion.div
-              className="fixed inset-0 bg-black/30 flex items-center justify-center p-4"
-              onClick={() => setSelectedDay(null)}
-            >
-              <motion.div
-                className="bg-white text-orange-700 rounded-2xl p-6 max-w-2xl w-full"
-                onClick={(e) => e.stopPropagation()}
-              >
-
-                <h2 className="text-2xl font-bold mb-3">
-                  {selectedDay.emoji} {selectedDay.title}
-                </h2>
-
-                <p className="mb-4">{selectedDay.summary}</p>
-
-                <div className="bg-orange-100 p-4 rounded-xl mb-4">
-                  <div className="space-y-2">
-                    {selectedDay.itinerary.map((step, i) => (
-                      <p
-                        key={i}
-                        className="leading-relaxed text-[15px]"
-                        dangerouslySetInnerHTML={{ __html: `• ${step.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}` }}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                <div className="bg-orange-200 p-3 rounded-xl">
-                  <p className="text-xs uppercase">Dónde dormimos</p>
-                  <p className="font-bold">{selectedDay.lodging}</p>
-                </div>
-
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-      </div>
+    <div class="bg-orange-100 p-4 rounded-xl mb-4">
+      <ul id="itinerary" class="space-y-2"></ul>
     </div>
-  );
+
+    <div class="bg-orange-200 p-3 rounded-xl">
+      <p class="text-xs uppercase">Dónde dormimos</p>
+      <p class="font-bold" id="lodging"></p>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const days = [
+
+{
+date:'2026-07-30',
+day:'30 Jul',
+title:'Llegada a San Francisco',
+emoji:'🌁',
+distanceKm:20,
+lodging:'San Francisco (Fisherman’s Wharf)',
+summary:'Llegada a la Costa Oeste, primeras sensaciones y adaptación al jet lag.',
+itinerary:[
+'Llegada al aeropuerto internacional de San Francisco sobre las 14:00, paso por inmigración y recogida de equipaje mientras empieza la adaptación al cambio horario.',
+'Traslado hacia la ciudad cruzando barrios residenciales hasta Fisherman’s Wharf, primera toma de contacto con la bahía.',
+'Paseo por Pier 39, observando los leones marinos y el ambiente portuario.',
+'Primer contacto con los Cable Cars, símbolo histórico de la ciudad.',
+'Cena ligera y descanso para recuperación del jet lag.'
+]
+},
+
+{
+date:'2026-07-31',
+day:'31 Jul',
+title:'San Francisco completo',
+emoji:'🌉',
+distanceKm:30,
+lodging:'San Francisco',
+summary:'Día completo explorando iconos de la ciudad.',
+itinerary:[
+'Ferry a **Alcatraz** con visita a la antigua prisión.', 
+'Descenso por la famosa **Lombard Street**.', 
+'Paseo por **Chinatown**, el más antiguo de EE.UU.', 
+'Parada en **Painted Ladies** en Alamo Square.', 
+'Atardecer en **Twin Peaks** con vistas panorámicas.'
+]
+},
+
+{
+date:'2026-08-01',
+day:'1 Ago',
+title:'San Francisco → Yosemite',
+emoji:'🏞️',
+distanceKm:320,
+lodging:'Yosemite Valley / El Portal',
+summary:'Entrada en Sierra Nevada y Yosemite.',
+itinerary:[
+'Salida atravesando el Central Valley agrícola.',
+'Llegada a Tunnel View, primera gran panorámica de Yosemite.',
+'Descenso a Yosemite Valley.',
+'Parada frente a El Capitan.',
+'Visita a Bridalveil Fall.'
+]
+},
+
+{
+date:'2026-08-02',
+day:'2 Ago',
+title:'Yosemite',
+emoji:'⛰️',
+distanceKm:50,
+lodging:'Yosemite Valley',
+summary:'Día completo explorando el corazón natural de Yosemite.',
+itinerary:[
+'Salida temprano hacia **Glacier Point**, uno de los miradores más impresionantes de toda California, desde donde se aprecia el valle completo, **Half Dome** y las gigantescas paredes de granito que hicieron famoso al parque.',
+'Paseo relajado hasta **Mirror Lake**, un lago estacional que refleja las montañas como un espejo y permite disfrutar de una zona mucho más tranquila y silenciosa del parque.',
+'Recorrido por parte del **Valley Loop Trail**, caminando entre bosques de pinos, praderas y ríos glaciares mientras aparecen continuamente vistas de **El Capitan** y **Yosemite Falls**.',
+'Por la tarde, realización del famoso **Mist Trail** hasta **Vernal Fall**, probablemente el sendero más icónico del parque, donde la fuerza de la cascada genera una nube de agua constante sobre las escaleras de piedra.',
+'Atardecer tranquilo en Yosemite Valley disfrutando del ambiente natural y del cambio de colores sobre las montañas de granito.'
+]
+},
+
+{
+date:'2026-08-03',
+day:'3 Ago',
+title:'Yosemite → Sequoia',
+emoji:'🌲',
+distanceKm:220,
+lodging:'Three Rivers',
+summary:'Secuoyas gigantes.',
+itinerary:[
+'Salida desde Yosemite atravesando carreteras de montaña de Sierra Nevada rodeadas de bosques inmensos y pequeños pueblos del interior de California.',
+'Entrada en **Sequoia National Park**, parque famoso por albergar algunos de los árboles más grandes y antiguos del planeta.',
+'Visita al espectacular **General Sherman Tree**, considerado el árbol con mayor volumen del mundo, una auténtica barbaridad natural que supera los 80 metros de altura.',
+'Paseo por **Giant Forest**, donde cientos de secuoyas gigantes crean un ambiente casi irreal y silencioso.',
+'Parada en **Tunnel Log**, un árbol caído atravesado artificialmente para permitir el paso de vehículos y convertido en uno de los puntos clásicos del parque.',
+'Llegada a Three Rivers para descansar antes del gran cruce desértico del día siguiente.'
+]
+},
+
+{
+date:'2026-08-04',
+day:'4 Ago',
+title:'Sequoia → Death Valley → Las Vegas',
+emoji:'🏜️',
+distanceKm:450,
+lodging:'Las Vegas',
+summary:'Desierto extremo.',
+itinerary:[
+'Salida muy temprano para evitar las horas de máximo calor en **Death Valley**, uno de los lugares más extremos del planeta.',
+'Parada en **Zabriskie Point**, famoso por sus montañas erosionadas con formas onduladas y colores amarillos y anaranjados que parecen de otro planeta.',
+'Visita a **Badwater Basin**, situado 86 metros bajo el nivel del mar y considerado el punto más bajo de Norteamérica.',
+'Paso por **Furnace Creek**, pequeño oasis en mitad del desierto donde es importante hidratarse y revisar combustible.',
+'Durante la ruta aparecen enormes rectas desérticas, montañas áridas y paisajes completamente vacíos que representan el auténtico Oeste americano.',
+'Llegada a **Las Vegas** al anochecer, donde el contraste entre el desierto y la explosión de luces de la ciudad resulta brutal.'
+]
+},
+
+{
+date:'2026-08-05',
+day:'5 Ago',
+title:'Las Vegas',
+emoji:'🎰',
+distanceKm:20,
+lodging:'Las Vegas',
+summary:'Ciudad del espectáculo.',
+itinerary:[
+'Recorrido completo por **The Strip**, la avenida principal de Las Vegas donde se concentran los hoteles y casinos más famosos del mundo.',
+'Visita al **Bellagio** para ver sus fuentes danzantes sincronizadas con música.',
+'Entrada en hoteles temáticos como París, Venecia o Nueva York, todos construidos como enormes escenarios cinematográficos.',
+'Tiempo libre para descansar en la piscina y recuperarse de los kilómetros acumulados durante el roadtrip.',
+'Por la noche, paseo por **Fremont Street**, la zona clásica de Las Vegas cubierta por una gigantesca pantalla LED.'
+]
+},
+
+{
+date:'2026-08-06',
+day:'6 Ago',
+title:'Las Vegas → Zion',
+emoji:'🏞️',
+distanceKm:260,
+lodging:'Springdale',
+summary:'Entrada en Utah.',
+itinerary:[
+'Salida desde Las Vegas dejando atrás el ambiente artificial de Nevada para entrar poco a poco en los enormes paisajes abiertos de Utah.',
+'Durante la carretera comienzan a aparecer formaciones rocosas rojizas y cañones que anuncian la llegada al suroeste más salvaje de Estados Unidos.',
+'Entrada en **Zion National Park**, probablemente uno de los parques más espectaculares del viaje gracias a sus paredes verticales gigantescas y al contraste entre roca roja y vegetación.',
+'Paseo por **Riverside Walk**, sendero sencillo que sigue el curso del río Virgin entre paredes de cientos de metros de altura.',
+'Paradas en varios miradores panorámicos para contemplar la inmensidad del cañón principal y entender por qué Zion es considerado uno de los lugares favoritos de senderistas y fotógrafos.',
+'Llegada al pequeño pueblo de Springdale, completamente integrado en el paisaje del parque y perfecto para descansar rodeado de montañas.'
+]
+},
+
+{
+date:'2026-08-07',
+day:'7 Ago',
+title:'Zion → Bryce Canyon',
+emoji:'🧡',
+distanceKm:130,
+lodging:'Bryce Canyon City',
+summary:'Paisaje surrealista.',
+itinerary:[
+'Salida desde Zion atravesando carreteras panorámicas rodeadas de montañas rojizas y bosques del sur de Utah.',
+'Llegada a **Bryce Canyon National Park**, completamente distinto al resto de parques gracias a sus formaciones llamadas hoodoos.',
+'Primera parada en **Bryce Point**, donde aparece ante vosotros el gigantesco anfiteatro natural lleno de agujas de piedra naranja y rojiza.',
+'Recorrido por **Sunrise Point** y **Sunset Point**, dos miradores clásicos desde donde cambian totalmente los colores según la posición del sol.',
+'Descenso parcial por el famoso **Navajo Loop Trail**, caminando entre paredes estrechas y columnas rocosas que parecen escenarios de fantasía.',
+'Atardecer tranquilo disfrutando de cómo Bryce Canyon cambia de color constantemente durante las últimas horas del día.'
+]
+},
+
+{
+date:'2026-08-08',
+day:'8 Ago',
+title:'Bryce → Antelope → Page',
+emoji:'📸',
+distanceKm:240,
+lodging:'Page',
+summary:'Cañones y luz.',
+itinerary:[
+'Salida temprano hacia Arizona atravesando carreteras desérticas infinitas rodeadas de paisajes áridos y rojizos.',
+'Llegada a **Antelope Canyon**, uno de los lugares más fotografiados del oeste americano, famoso por sus estrechos pasillos esculpidos por el agua y por los haces de luz que atraviesan la roca.',
+'Recorrido guiado por el interior del cañón entendiendo cómo las inundaciones repentinas fueron moldeando sus formas onduladas durante miles de años.',
+'Parada posterior en **Horseshoe Bend**, impresionante meandro del río Colorado que forma una curva perfecta excavada en la roca.',
+'Tiempo libre en Page para descansar y disfrutar de un ambiente completamente desértico típico del norte de Arizona.',
+'Atardecer tranquilo sobre el paisaje rojizo del lago Powell y los alrededores de Page.'
+]
+},
+
+{
+date:'2026-08-09',
+day:'9 Ago',
+title:'Page → Monument Valley',
+emoji:'🤠',
+distanceKm:200,
+lodging:'Monument Valley',
+summary:'Western americano.',
+itinerary:[
+'Ruta por carreteras infinitas del territorio navajo mientras el paisaje se vuelve cada vez más cinematográfico.',
+'Llegada a **Monument Valley**, uno de los lugares más icónicos de todo Estados Unidos gracias a sus gigantescas formaciones rocosas aisladas en mitad del desierto.',
+'Recorrido por la **Monument Valley Scenic Drive**, atravesando pistas de tierra entre las enormes mesas y buttes rojizas.',
+'Parada en **Forrest Gump Point**, famoso punto de carretera donde se grabó una de las escenas más conocidas de la película.',
+'Explicación de la importancia cultural y espiritual que tiene esta zona para la nación navajo.',
+'Atardecer inolvidable viendo cómo las rocas adquieren tonos rojos intensísimos con la luz baja del sol.'
+]
+},
+
+{
+date:'2026-08-10',
+day:'10 Ago',
+title:'Monument Valley → Grand Canyon',
+emoji:'🧭',
+distanceKm:280,
+lodging:'Tusayan',
+summary:'Gran Cañón.',
+itinerary:[
+'Salida desde Monument Valley atravesando enormes paisajes abiertos del norte de Arizona.',
+'Entrada al parque por la panorámica **Desert View Drive**, carretera llena de miradores sobre el Gran Cañón.',
+'Paradas constantes para contemplar cómo el río Colorado ha excavado durante millones de años uno de los paisajes más impresionantes del mundo.',
+'Visita a varios miradores del South Rim donde se aprecia la inmensidad real del **Grand Canyon**, algo imposible de entender hasta verlo en persona.',
+'Tiempo para pasear junto al borde del cañón observando los cambios de color de las paredes rocosas según avanza la tarde.',
+'Atardecer sobre el Gran Cañón, probablemente uno de los momentos más espectaculares de todo el viaje.'
+]
+},
+
+{
+date:'2026-08-11',
+day:'11 Ago',
+title:'Route 66 → Kingman',
+emoji:'🛣️',
+distanceKm:300,
+lodging:'Kingman',
+summary:'Route 66.',
+itinerary:[
+'Salida desde el Gran Cañón hacia las carreteras históricas del oeste americano.',
+'Parada en **Seligman**, pequeño pueblo considerado uno de los lugares que ayudó a preservar la mítica **Route 66**.',
+'Paseo entre diners clásicos, coches antiguos, moteles vintage y tiendas llenas de referencias a la carretera más famosa del país.',
+'Visita a **Hackberry General Store**, antigua gasolinera convertida en museo improvisado de la Route 66.',
+'Conducción relajada por largos tramos históricos rodeados de desierto y pueblos prácticamente detenidos en los años 50.',
+'Llegada a Kingman, otra ciudad profundamente ligada a la historia de la carretera americana.'
+]
+},
+
+{
+date:'2026-08-12',
+day:'12 Ago',
+title:'Joshua Tree → San Diego',
+emoji:'🌵',
+distanceKm:480,
+lodging:'San Diego',
+summary:'Último desierto.',
+itinerary:[
+'Salida desde Arizona rumbo a California atravesando enormes paisajes desérticos del Mojave.',
+'Entrada en **Joshua Tree National Park**, famoso por sus árboles retorcidos y sus gigantescas formaciones de roca.',
+'Paradas en distintos puntos panorámicos entendiendo cómo este parque mezcla dos ecosistemas desérticos diferentes.',
+'Paseos cortos debido al calor extremo típico de agosto en la zona.',
+'A medida que avanza la carretera el paisaje cambia poco a poco hasta volver a aparecer el océano Pacífico.',
+'Llegada a **San Diego**, una de las ciudades con mejor clima de Estados Unidos y ambiente mucho más relajado que Los Ángeles.'
+]
+},
+
+{
+date:'2026-08-13',
+day:'13 Ago',
+title:'San Diego',
+emoji:'🌊',
+distanceKm:40,
+lodging:'San Diego',
+summary:'Relax.',
+itinerary:[
+'Mañana relajada en **La Jolla**, una de las zonas más bonitas de San Diego, famosa por sus acantilados, aguas turquesas y colonias de focas descansando junto al océano.',
+'Paseo por la costa observando cuevas marinas, pequeñas calas y el ambiente elegante y tranquilo característico de esta zona.',
+'Tiempo libre en **Pacific Beach**, donde aparece el ambiente surfero más típico de California con paseo marítimo, bicicletas y bares frente al Pacífico.',
+'Comida relajada cerca de la playa disfrutando de uno de los días menos intensos del roadtrip y perfectos para descansar de tantas horas de carretera.',
+'Al final de la tarde, visita a **Sunset Cliffs**, probablemente el mejor lugar de San Diego para contemplar la puesta de sol sobre el océano.',
+'Noche tranquila disfrutando del ambiente relajado y costero que diferencia San Diego del resto de grandes ciudades californianas.'
+]
+},
+
+{
+date:'2026-08-14',
+day:'14 Ago',
+title:'San Diego → Los Ángeles',
+emoji:'🌴',
+distanceKm:200,
+lodging:'Los Ángeles',
+summary:'Costa californiana.',
+itinerary:[
+'Salida desde San Diego siguiendo la costa del Pacífico en dirección norte.',
+'Primera parada en **Laguna Beach**, una de las localidades costeras más bonitas y exclusivas del sur de California, famosa por sus pequeñas calas y ambiente artístico.',
+'Continuación hacia **Newport Beach**, zona muy conocida por sus puertos deportivos, mansiones y playas interminables.',
+'Posible parada en **Huntington Beach**, considerada por muchos la capital del surf en California gracias a sus enormes playas y ambiente surfero.',
+'Llegada a **Santa Monica**, donde el famoso muelle marca simbólicamente el final de la Route 66.',
+'Primer paseo nocturno por Los Ángeles disfrutando del ambiente junto al océano y de la energía caótica típica de la ciudad.'
+]
+},
+
+{
+date:'2026-08-15',
+day:'15 Ago',
+title:'Los Ángeles',
+emoji:'🎬',
+distanceKm:40,
+lodging:'Los Ángeles',
+summary:'Hollywood.',
+itinerary:[
+'Comienzo del día recorriendo **Hollywood Boulevard**, probablemente la calle más famosa relacionada con el cine y el entretenimiento.',
+'Paseo entre estrellas del Paseo de la Fama, teatros históricos y carteles luminosos que representan la imagen clásica de Hollywood.',
+'Subida al **Griffith Observatory**, uno de los mejores miradores de Los Ángeles y lugar desde donde se obtiene una gran vista del cartel de Hollywood y del inmenso entramado urbano de la ciudad.',
+'Tiempo para recorrer diferentes barrios de Los Ángeles entendiendo cómo la ciudad se extiende casi sin límites entre autopistas y zonas residenciales.',
+'Tarde en **Santa Monica** y **Venice Beach**, dos lugares completamente distintos pero esenciales para entender el estilo de vida californiano.',
+'Paseo nocturno disfrutando del ambiente de Venice, lleno de artistas callejeros, música y cultura alternativa junto al océano.'
+]
+},
+
+{
+date:'2026-08-16',
+day:'16 Ago',
+title:'Los Ángeles relax',
+emoji:'🌅',
+distanceKm:30,
+lodging:'Los Ángeles',
+summary:'Último día.',
+itinerary:[
+'Mañana tranquila recorriendo la costa de **Malibu**, una de las zonas más exclusivas de California y famosa por sus playas abiertas y casas frente al océano.',
+'Tiempo libre para descansar, hacer algunas compras finales o simplemente disfrutar del ritmo relajado de la costa oeste.',
+'Posibilidad de realizar el tour de **Warner Bros Studios**, entrando en estudios reales de cine y televisión donde se grabaron películas y series míticas.',
+'Últimas horas del viaje disfrutando del ambiente californiano, los coches clásicos, las palmeras y la sensación permanente de verano.',
+'Atardecer final sobre el Pacífico, momento perfecto para cerrar el roadtrip después de miles de kilómetros atravesando desiertos, parques nacionales y grandes ciudades.'
+]
+},
+
+{
+date:'2026-08-17',
+day:'17 Ago',
+title:'Vuelta a Madrid',
+emoji:'✈️',
+distanceKm:0,
+lodging:'Vuelo',
+summary:'Fin del roadtrip.',
+itinerary:[
+'Última mañana tranquila en Los Ángeles aprovechando para desayunar sin prisas y disfrutar por última vez del ambiente californiano.',
+'Paseo corto final o últimas compras antes de dirigirse al aeropuerto internacional de Los Ángeles.',
+'Devolución del coche de alquiler después de miles de kilómetros atravesando algunos de los paisajes más espectaculares de Estados Unidos.',
+'Vuelo de regreso a Madrid poniendo fin a un roadtrip completo por la Costa Oeste americana.',
+'Tiempo perfecto para repasar fotos, recuerdos y todos los lugares recorridos durante el viaje.'
+]
 }
+
+];
+
+const grid = document.getElementById("grid");
+const modal = document.getElementById("modal");
+
+function openDay(i){
+
+  const d = days[i];
+
+  document.getElementById("title").innerText =
+    d.emoji + " " + d.title;
+
+  document.getElementById("summary").innerText =
+    d.summary;
+
+  document.getElementById("lodging").innerText =
+    d.lodging;
+
+  const list = document.getElementById("itinerary");
+
+  list.innerHTML = "";
+
+  d.itinerary.forEach(t=>{
+
+    const li = document.createElement("li");
+
+    // SOPORTE PARA **NEGRITAS**
+    li.innerHTML =
+      "• " + t.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+    list.appendChild(li);
+
+  });
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+
+}
+
+function closeModal(){
+
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+
+}
+
+// CERRAR HACIENDO CLICK FUERA DEL MODAL
+modal.addEventListener("click", (e) => {
+
+  if(e.target === modal){
+
+    closeModal();
+
+  }
+
+});
+
+days.forEach((d,i)=>{
+
+  const card = document.createElement("div");
+
+  card.className =
+    "bg-orange-100 p-4 rounded-xl cursor-pointer hover:scale-[1.02] transition";
+
+  card.innerHTML = `
+    <div class="flex justify-between">
+      <span class="text-2xl">${d.emoji}</span>
+      <span>🚗 ${d.distanceKm} km</span>
+    </div>
+
+    <h3 class="font-bold">${d.day} — ${d.title}</h3>
+
+    <p class="text-sm">${d.summary}</p>
+  `;
+
+  card.onclick = ()=>openDay(i);
+
+  grid.appendChild(card);
+
+});
+
+</script>
+
+</body>
+</html>
+
+
+
+
